@@ -21,8 +21,9 @@ namespace Store_Management
         private OleDbConnection connection = new OleDbConnection();
         BindingSource inventoryBindingSource = new BindingSource();
         BindingSource productBindingSource = new BindingSource();
+        BindingSource departmentBindingSource = new BindingSource();
 
-        String defaultConnection = "";
+        String defaultConnection = "";//string for holding the default connenction string to the built in database;
         public frmMain()
         {
             InitializeComponent();
@@ -38,7 +39,6 @@ namespace Store_Management
            fillAllTables("Inventory data could not be recieved", "Product data could not be recieved");
         }
 
-
         //closes the form
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -53,7 +53,7 @@ namespace Store_Management
                 connection.Open();
                 OleDbCommand getInventory = new OleDbCommand();
                 getInventory.Connection = connection;
-                getInventory.CommandText = "SELECT ProductName, UPC, Department, Instock FROM Products ";
+                getInventory.CommandText = "SELECT Products.ProductName, Products.UPC, Departments.DepartmentName, Products.Instock FROM Products INNER JOIN Departments ON Products.Department = Departments.ID";
                 OleDbDataAdapter adap = new OleDbDataAdapter(getInventory);
                 DataSet ds = new DataSet();
                 adap.Fill(ds);
@@ -70,7 +70,6 @@ namespace Store_Management
             {
                 MessageBox.Show(error);
             }
-
         }
 
         //fills the product table
@@ -81,7 +80,7 @@ namespace Store_Management
                 connection.Open();
                 OleDbCommand getInventory = new OleDbCommand();
                 getInventory.Connection = connection;
-                getInventory.CommandText = "SELECT ProductName, UPC, Department, SellPrice, BuyCost FROM Products ";
+                getInventory.CommandText = "SELECT Products.ProductName, Products.UPC, Departments.DepartmentName, Products.SellPrice, Products.BuyCost, Products.Instock FROM Products INNER JOIN Departments ON Products.Department = Departments.ID";
                 OleDbDataAdapter adap = new OleDbDataAdapter(getInventory);
                 DataSet ds = new DataSet();
                 adap.Fill(ds);
@@ -95,6 +94,7 @@ namespace Store_Management
                 dgvProducts.Columns[2].HeaderText = "Department";//set column 3 
                 dgvProducts.Columns[3].HeaderText = "Sell Price";//set column 4
                 dgvProducts.Columns[4].HeaderText = "Buy Cost";//set column 5
+                dgvProducts.Columns[5].Visible = false;          
                 dgvProducts.Columns[3].DefaultCellStyle.Format = "C2";
                 dgvProducts.Columns[4].DefaultCellStyle.Format = "C2";
 
@@ -106,6 +106,34 @@ namespace Store_Management
 
         }
 
+        public void departmentFilter()
+        {
+            try
+            {
+                connection.Open();
+                OleDbCommand getDepartments = new OleDbCommand();
+                getDepartments.Connection = connection;
+                getDepartments.CommandText = "SELECT DepartmentName,ID FROM Departments";
+                OleDbDataAdapter adap = new OleDbDataAdapter(getDepartments);
+                DataSet ds = new DataSet();
+                adap.Fill(ds);
+                getDepartments.Dispose();
+                connection.Close();
+                departmentBindingSource.DataSource = ds.Tables[0].DefaultView;
+
+                cbxDepartment.DataSource = departmentBindingSource;    
+                cbxDepartment.DisplayMember = "DepartmentName";
+                cbxDepartment.ValueMember = "ID";
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Department data could not be found");
+            }
+        }
+
+
+        //function that allows the user to change which database they are connected to
         private void changeDatabaseToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             try
@@ -121,9 +149,7 @@ namespace Store_Management
                 //if no file is selected then message will be displayed
                 if (openFileDialog1.FileName == "")
                 {
-
                     MessageBox.Show("No File was selected");
-
                 }
                 else {
 
@@ -155,5 +181,27 @@ namespace Store_Management
             fillProductTable(msg2);
         }
 
+        private void cbxFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (cbxFilter.SelectedIndex)
+            {
+                case 0:
+                    productBindingSource.RemoveFilter();
+                    break;
+                case 1:
+                    productBindingSource.Filter = "Instock = 0";
+                    break;
+                default:
+                    productBindingSource.RemoveFilter();
+                    break;
+            }
+
+
+        }
+
+        private void cbxDepartment_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
