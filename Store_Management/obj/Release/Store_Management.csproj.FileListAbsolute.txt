@@ -8,3 +8,13 @@ H:\2016 school year\Store_Management\Store_Management\obj\Release\Store_Manageme
 H:\2016 school year\Store_Management\Store_Management\obj\Release\Store_Management.pdb
 H:\2016 school year\Store_Management\Store_Management\bin\Release\Store.accdb
 H:\2016 school year\Store_Management\Store_Management\obj\Release\Store_Management.csprojResolveAssemblyReference.cache
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\bin\Release\Store_Management.exe.config
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\obj\Release\Store_Management.exe
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\obj\Release\Store_Management.pdb
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\bin\Release\Store.accdb
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\bin\Release\Store_Management.exe
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\bin\Release\Store_Management.pdb
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\obj\Release\Store_Management.csprojResolveAssemblyReference.cache
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\obj\Release\Store_Management.frmMain.resources
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\obj\Release\Store_Management.Properties.Resources.resources
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\obj\Release\Store_Management.csproj.GenerateResource.Cache

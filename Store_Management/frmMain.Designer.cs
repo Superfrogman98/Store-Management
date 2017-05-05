@@ -30,6 +30,8 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,10 +44,14 @@
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabInventory = new System.Windows.Forms.TabPage();
             this.dgvInventory = new System.Windows.Forms.DataGridView();
+            this.tabProducts = new System.Windows.Forms.TabPage();
+            this.dgvProducts = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabInventory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventory)).BeginInit();
+            this.tabProducts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -83,6 +89,7 @@
             this.changeDatabaseToolStripMenuItem1.Name = "changeDatabaseToolStripMenuItem1";
             this.changeDatabaseToolStripMenuItem1.Size = new System.Drawing.Size(166, 22);
             this.changeDatabaseToolStripMenuItem1.Text = "Change Database";
+            this.changeDatabaseToolStripMenuItem1.Click += new System.EventHandler(this.changeDatabaseToolStripMenuItem1_Click);
             // 
             // closeToolStripMenuItem
             // 
@@ -122,6 +129,7 @@
             // tabControlMain
             // 
             this.tabControlMain.Controls.Add(this.tabInventory);
+            this.tabControlMain.Controls.Add(this.tabProducts);
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tabControlMain.Location = new System.Drawing.Point(0, 27);
             this.tabControlMain.Name = "tabControlMain";
@@ -164,6 +172,41 @@
             this.dgvInventory.Size = new System.Drawing.Size(594, 381);
             this.dgvInventory.TabIndex = 0;
             // 
+            // tabProducts
+            // 
+            this.tabProducts.Controls.Add(this.dgvProducts);
+            this.tabProducts.Location = new System.Drawing.Point(4, 22);
+            this.tabProducts.Name = "tabProducts";
+            this.tabProducts.Size = new System.Drawing.Size(594, 381);
+            this.tabProducts.TabIndex = 1;
+            this.tabProducts.Text = "Products";
+            this.tabProducts.UseVisualStyleBackColor = true;
+            // 
+            // dgvProducts
+            // 
+            this.dgvProducts.AllowUserToAddRows = false;
+            this.dgvProducts.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Silver;
+            this.dgvProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvProducts.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvProducts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvProducts.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dgvProducts.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dgvProducts.Location = new System.Drawing.Point(0, 0);
+            this.dgvProducts.Name = "dgvProducts";
+            this.dgvProducts.ReadOnly = true;
+            this.dgvProducts.RowHeadersVisible = false;
+            this.dgvProducts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvProducts.Size = new System.Drawing.Size(338, 381);
+            this.dgvProducts.TabIndex = 1;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -179,6 +222,8 @@
             this.tabControlMain.ResumeLayout(false);
             this.tabInventory.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventory)).EndInit();
+            this.tabProducts.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -198,6 +243,8 @@
         private System.Windows.Forms.ToolStripMenuItem inventoryToolStripMenuItem;
         private System.Windows.Forms.TabPage tabInventory;
         private System.Windows.Forms.DataGridView dgvInventory;
+        private System.Windows.Forms.TabPage tabProducts;
+        private System.Windows.Forms.DataGridView dgvProducts;
     }
 }
 
