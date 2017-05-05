@@ -1,0 +1,12 @@
+H:\2016 school year\Store_Management\Store_Management\bin\Debug\Store_Management.exe.config
+H:\2016 school year\Store_Management\Store_Management\bin\Debug\Store_Management.exe
+H:\2016 school year\Store_Management\Store_Management\bin\Debug\Store_Management.pdb
+H:\2016 school year\Store_Management\Store_Management\obj\Debug\Store_Management.csprojResolveAssemblyReference.cache
+H:\2016 school year\Store_Management\Store_Management\obj\Debug\Store_Management.frmMain.resources
+H:\2016 school year\Store_Management\Store_Management\obj\Debug\Store_Management.Properties.Resources.resources
+H:\2016 school year\Store_Management\Store_Management\obj\Debug\Store_Management.csproj.GenerateResource.Cache
+H:\2016 school year\Store_Management\Store_Management\obj\Debug\Store_Management.exe
+H:\2016 school year\Store_Management\Store_Management\obj\Debug\Store_Management.pdb
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\bin\Debug\Store_Management.exe.config
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\obj\Debug\Store_Management.exe
+C:\Users\241848.STHS\Source\Repos\Store-Management\Store_Management\obj\Debug\Store_Management.pdb
