@@ -37,6 +37,7 @@ namespace Store_Management
             connection.ConnectionString = defaultConnection;
 
            fillAllTables("Inventory data could not be recieved", "Product data could not be recieved");
+            cbxDepartment.SelectedIndex = 0;
         }
 
         //closes the form
@@ -50,17 +51,17 @@ namespace Store_Management
         {
             try
             {
-                connection.Open();
-                OleDbCommand getInventory = new OleDbCommand();
-                getInventory.Connection = connection;
-                getInventory.CommandText = "SELECT Products.ProductName, Products.UPC, Departments.DepartmentName, Products.Instock FROM Products INNER JOIN Departments ON Products.Department = Departments.ID";
+                connection.Open(); // connects to the database
+                OleDbCommand getInventory = new OleDbCommand();  // sets up a new command
+                getInventory.Connection = connection;  // sets the connection of the command
+                getInventory.CommandText = "SELECT Products.ProductName, Products.UPC, Departments.DepartmentName, Products.Instock FROM Products INNER JOIN Departments ON Products.Department = Departments.ID"; // the sql of the command, this one joins the products and department tables using the department id to get the name of the dapartment.
                 OleDbDataAdapter adap = new OleDbDataAdapter(getInventory);
                 DataSet ds = new DataSet();
-                adap.Fill(ds);
+                adap.Fill(ds); //fills the datasource using the oledbcommand
                 getInventory.Dispose();
                 connection.Close();
-                inventoryBindingSource.DataSource = ds.Tables[0].DefaultView;
-                dgvInventory.DataSource = inventoryBindingSource;
+                inventoryBindingSource.DataSource = ds.Tables[0].DefaultView; // sets the datasource to a binding source so it can be filtered
+                dgvInventory.DataSource = inventoryBindingSource; //connects the datagridview to the datasource
                 dgvInventory.Columns[0].HeaderText = "Product Name";//set column 1 
                                                                     //Keep column two header as UPC
                 dgvInventory.Columns[2].HeaderText = "Department";//set column 3 
@@ -77,18 +78,17 @@ namespace Store_Management
         {
             try
             {
-                connection.Open();
-                OleDbCommand getInventory = new OleDbCommand();
-                getInventory.Connection = connection;
-                getInventory.CommandText = "SELECT Products.ProductName, Products.UPC, Departments.DepartmentName, Products.SellPrice, Products.BuyCost, Products.Instock FROM Products INNER JOIN Departments ON Products.Department = Departments.ID";
+                connection.Open(); // connects to the database
+                OleDbCommand getInventory = new OleDbCommand(); // sets up a new command
+                getInventory.Connection = connection; // sets the connection of the command
+                getInventory.CommandText = "SELECT Products.ProductName, Products.UPC, Departments.DepartmentName, Products.SellPrice, Products.BuyCost, Products.Instock FROM Products INNER JOIN Departments ON Products.Department = Departments.ID"; // the sql of the command, this one joins the products and department tables using the department id to get the name of the dapartment.
                 OleDbDataAdapter adap = new OleDbDataAdapter(getInventory);
                 DataSet ds = new DataSet();
-                adap.Fill(ds);
+                adap.Fill(ds); //fills the datasource using the oledbcommand
                 getInventory.Dispose();
                 connection.Close();
-                productBindingSource.DataSource = ds.Tables[0].DefaultView;
-
-                dgvProducts.DataSource = productBindingSource;
+                productBindingSource.DataSource = ds.Tables[0].DefaultView;// sets the datasource to a binding source so it can be filtered
+                dgvProducts.DataSource = productBindingSource; //connects the datagridview to the datasource
                 dgvProducts.Columns[0].HeaderText = "Product Name";//set column 1 
                                                                     //Keep column two header as UPC
                 dgvProducts.Columns[2].HeaderText = "Department";//set column 3 
@@ -106,11 +106,12 @@ namespace Store_Management
 
         }
 
-        public void departmentFilter()
+        //fills the dropdown box filter for departments from the database
+        public void setupDepartmentFilter()
         {
             try
             {
-                connection.Open();
+                connection.Open(); // connects to the database
                 OleDbCommand getDepartments = new OleDbCommand();
                 getDepartments.Connection = connection;
                 getDepartments.CommandText = "SELECT DepartmentName,ID FROM Departments";
@@ -120,11 +121,13 @@ namespace Store_Management
                 getDepartments.Dispose();
                 connection.Close();
                 departmentBindingSource.DataSource = ds.Tables[0].DefaultView;
-
                 cbxDepartment.DataSource = departmentBindingSource;    
                 cbxDepartment.DisplayMember = "DepartmentName";
-                cbxDepartment.ValueMember = "ID";
-
+                cbxDepartment.ValueMember = "DepartmentName";
+                DataRow newRow = ds.Tables[0].NewRow();
+                newRow[0] = "<No Filter>";
+                newRow[1] = 0;
+                ds.Tables[0].Rows.InsertAt(newRow,0);
             }
             catch (Exception)
             {
@@ -179,29 +182,71 @@ namespace Store_Management
         {
             fillInventoryTable(msg1);
             fillProductTable(msg2);
+            setupDepartmentFilter();
         }
 
-        private void cbxFilter_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch (cbxFilter.SelectedIndex)
-            {
-                case 0:
-                    productBindingSource.RemoveFilter();
-                    break;
-                case 1:
-                    productBindingSource.Filter = "Instock = 0";
-                    break;
-                default:
-                    productBindingSource.RemoveFilter();
-                    break;
-            }
 
+//functions that are used for filtering the inventory table
 
-        }
-
+        //handles filtering on the inventory tab dropdown filter
         private void cbxDepartment_SelectedIndexChanged(object sender, EventArgs e)
         {
+            handleInventoryFiltering();
+        }
+
+        //handles the in stock checkbox filter
+        private void chkStock_CheckedChanged(object sender, EventArgs e)
+        {
+            handleInventoryFiltering();
+        }
+
+        //search box for product name
+        private void txtSearchName_TextChanged(object sender, EventArgs e)
+        {
+            handleInventoryFiltering();
+        }
+        //search box for upc
+        private void txtSearchUPC_TextChanged(object sender, EventArgs e)
+        {
+            handleInventoryFiltering();
+        }
+
+        //adds to an existing filter so that compound filters work;
+        private static String addToFilter(String newParam, String oldFilter)
+        {
+            if (String.IsNullOrEmpty(oldFilter))
+            {
+                return newParam;
+            }
+
+            return "("+ oldFilter + ") AND (" + newParam + ")";
+        }
+
+
+        //function to handle all the filters on the inventory, allows for combo filters
+        private void handleInventoryFiltering()
+        {
+            inventoryBindingSource.RemoveFilter(); // removes existing filter, lower code rebuilds a filter where applicable
+
+            if (cbxDepartment.SelectedIndex > 0)
+            {
+                inventoryBindingSource.Filter = addToFilter("DepartmentName = '" + cbxDepartment.SelectedValue.ToString() + "'", inventoryBindingSource.Filter);
+            }
+            if(chkStock.Checked == true)
+            {
+                inventoryBindingSource.Filter = addToFilter("Instock = 0", inventoryBindingSource.Filter);
+            }
+            if(txtSearchName.Text.Trim() != "")
+            {
+                inventoryBindingSource.Filter = addToFilter("ProductName LIKE '" + txtSearchName.Text.Trim() + "*'", inventoryBindingSource.Filter);
+            }
+            if (txtSearchUPC.Text.Trim() != "")
+            {
+                inventoryBindingSource.Filter = addToFilter("UPC LIKE '" + txtSearchUPC.Text.Trim() + "*'", inventoryBindingSource.Filter);
+            }
 
         }
+
+        
     }
 }
