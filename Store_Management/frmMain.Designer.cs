@@ -43,8 +43,6 @@
             this.storePurchasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabInventory = new System.Windows.Forms.TabPage();
-            this.btnOrder = new System.Windows.Forms.Button();
-            this.chkStock = new System.Windows.Forms.CheckBox();
             this.cbxDepartment = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -52,18 +50,29 @@
             this.txtSearchUPC = new System.Windows.Forms.TextBox();
             this.txtSearchName = new System.Windows.Forms.TextBox();
             this.dgvInventory = new System.Windows.Forms.DataGridView();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.lblInstock = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.lblDepartment = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.lblUPC = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lblName = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnOrder = new System.Windows.Forms.Button();
+            this.chkStock = new System.Windows.Forms.CheckBox();
             this.tabProducts = new System.Windows.Forms.TabPage();
             this.btmSubmit = new System.Windows.Forms.Button();
             this.dgvProducts = new System.Windows.Forms.DataGridView();
             this.tabOrder = new System.Windows.Forms.TabPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabInventory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventory)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.tabProducts.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -167,26 +176,6 @@
             this.tabInventory.Text = "Inventory";
             this.tabInventory.UseVisualStyleBackColor = true;
             // 
-            // btnOrder
-            // 
-            this.btnOrder.Location = new System.Drawing.Point(6, 312);
-            this.btnOrder.Name = "btnOrder";
-            this.btnOrder.Size = new System.Drawing.Size(187, 38);
-            this.btnOrder.TabIndex = 11;
-            this.btnOrder.Text = "Add Selected Item to Order";
-            this.btnOrder.UseVisualStyleBackColor = true;
-            // 
-            // chkStock
-            // 
-            this.chkStock.AutoSize = true;
-            this.chkStock.Location = new System.Drawing.Point(10, 10);
-            this.chkStock.Name = "chkStock";
-            this.chkStock.Size = new System.Drawing.Size(147, 17);
-            this.chkStock.TabIndex = 10;
-            this.chkStock.Text = "Display Out of Stock Only";
-            this.chkStock.UseVisualStyleBackColor = true;
-            this.chkStock.CheckedChanged += new System.EventHandler(this.chkStock_CheckedChanged);
-            // 
             // cbxDepartment
             // 
             this.cbxDepartment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -256,13 +245,140 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvInventory.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvInventory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvInventory.Location = new System.Drawing.Point(0, 35);
+            this.dgvInventory.MultiSelect = false;
             this.dgvInventory.Name = "dgvInventory";
             this.dgvInventory.ReadOnly = true;
             this.dgvInventory.RowHeadersVisible = false;
             this.dgvInventory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvInventory.Size = new System.Drawing.Size(403, 346);
             this.dgvInventory.TabIndex = 0;
+            this.dgvInventory.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvInventory_SortRows);
+            this.dgvInventory.SelectionChanged += new System.EventHandler(this.dgvInventory_SelectionChanged);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label11);
+            this.groupBox1.Controls.Add(this.lblInstock);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.lblDepartment);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.lblUPC);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.lblName);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.btnOrder);
+            this.groupBox1.Controls.Add(this.chkStock);
+            this.groupBox1.Location = new System.Drawing.Point(398, 28);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 357);
+            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabStop = false;
+            // 
+            // label11
+            // 
+            this.label11.BackColor = System.Drawing.Color.Gray;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.label11.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label11.Location = new System.Drawing.Point(11, 196);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(175, 23);
+            this.label11.TabIndex = 19;
+            this.label11.Text = "Selected Product Info";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblInstock
+            // 
+            this.lblInstock.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblInstock.Location = new System.Drawing.Point(90, 294);
+            this.lblInstock.Name = "lblInstock";
+            this.lblInstock.Size = new System.Drawing.Size(97, 13);
+            this.lblInstock.TabIndex = 18;
+            this.lblInstock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(11, 294);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(87, 13);
+            this.label10.TabIndex = 17;
+            this.label10.Text = "Amount Instock: ";
+            // 
+            // lblDepartment
+            // 
+            this.lblDepartment.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblDepartment.Location = new System.Drawing.Point(74, 271);
+            this.lblDepartment.Name = "lblDepartment";
+            this.lblDepartment.Size = new System.Drawing.Size(112, 13);
+            this.lblDepartment.TabIndex = 16;
+            this.lblDepartment.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(10, 271);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(68, 13);
+            this.label8.TabIndex = 15;
+            this.label8.Text = "Department: ";
+            // 
+            // lblUPC
+            // 
+            this.lblUPC.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblUPC.Location = new System.Drawing.Point(42, 248);
+            this.lblUPC.Name = "lblUPC";
+            this.lblUPC.Size = new System.Drawing.Size(145, 13);
+            this.lblUPC.TabIndex = 14;
+            this.lblUPC.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(11, 248);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 13);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "UPC: ";
+            // 
+            // lblName
+            // 
+            this.lblName.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblName.Location = new System.Drawing.Point(87, 225);
+            this.lblName.Name = "lblName";
+            this.lblName.Size = new System.Drawing.Size(100, 13);
+            this.lblName.TabIndex = 12;
+            this.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(11, 225);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(81, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Product Name: ";
+            // 
+            // btnOrder
+            // 
+            this.btnOrder.Location = new System.Drawing.Point(6, 312);
+            this.btnOrder.Name = "btnOrder";
+            this.btnOrder.Size = new System.Drawing.Size(187, 38);
+            this.btnOrder.TabIndex = 11;
+            this.btnOrder.Text = "Add Selected Item to Order";
+            this.btnOrder.UseVisualStyleBackColor = true;
+            // 
+            // chkStock
+            // 
+            this.chkStock.AutoSize = true;
+            this.chkStock.Location = new System.Drawing.Point(10, 10);
+            this.chkStock.Name = "chkStock";
+            this.chkStock.Size = new System.Drawing.Size(147, 17);
+            this.chkStock.TabIndex = 10;
+            this.chkStock.Text = "Display Out of Stock Only";
+            this.chkStock.UseVisualStyleBackColor = true;
+            this.chkStock.CheckedChanged += new System.EventHandler(this.chkStock_CheckedChanged);
             // 
             // tabProducts
             // 
@@ -318,16 +434,6 @@
             this.tabOrder.Text = "Order Products";
             this.tabOrder.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.btnOrder);
-            this.groupBox1.Controls.Add(this.chkStock);
-            this.groupBox1.Location = new System.Drawing.Point(398, 28);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 357);
-            this.groupBox1.TabIndex = 13;
-            this.groupBox1.TabStop = false;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -346,10 +452,10 @@
             this.tabInventory.ResumeLayout(false);
             this.tabInventory.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventory)).EndInit();
-            this.tabProducts.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabProducts.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -382,6 +488,15 @@
         private System.Windows.Forms.Button btnOrder;
         private System.Windows.Forms.TabPage tabOrder;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label lblUPC;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblName;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label lblInstock;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label lblDepartment;
+        private System.Windows.Forms.Label label8;
     }
 }
 

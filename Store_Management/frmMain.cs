@@ -22,7 +22,7 @@ namespace Store_Management
         BindingSource inventoryBindingSource = new BindingSource();
         BindingSource productBindingSource = new BindingSource();
         BindingSource departmentBindingSource = new BindingSource();
-
+        int inventorySort = 0;
         String defaultConnection = "";//string for holding the default connenction string to the built in database;
         public frmMain()
         {
@@ -261,6 +261,21 @@ namespace Store_Management
 
         }
 
-        
+
+        //displays the data from the datagridview on the right and sets up data for it to be added to the order form
+        private void dgvInventory_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvInventory.SelectedRows[0].Index > -1)
+            {
+                lblName.Text = dgvInventory.SelectedRows[0].Cells[0].Value.ToString();
+                lblUPC.Text = dgvInventory.SelectedRows[0].Cells[1].Value.ToString();
+                lblDepartment.Text = dgvInventory.SelectedRows[0].Cells[2].Value.ToString();
+                lblInstock.Text = dgvInventory.SelectedRows[0].Cells[3].Value.ToString();
+            }
+        }
+
+        private void dgvInventory_SortRows(object sender, DataGridViewCellMouseEventArgs e)
+        {
+        }
     }
 }
