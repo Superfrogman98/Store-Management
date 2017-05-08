@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,6 +43,7 @@
             this.storePurchasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabInventory = new System.Windows.Forms.TabPage();
+            this.btnOrder = new System.Windows.Forms.Button();
             this.chkStock = new System.Windows.Forms.CheckBox();
             this.cbxDepartment = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -54,12 +55,15 @@
             this.tabProducts = new System.Windows.Forms.TabPage();
             this.btmSubmit = new System.Windows.Forms.Button();
             this.dgvProducts = new System.Windows.Forms.DataGridView();
+            this.tabOrder = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabInventory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventory)).BeginInit();
             this.tabProducts.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -138,6 +142,7 @@
             // 
             this.tabControlMain.Controls.Add(this.tabInventory);
             this.tabControlMain.Controls.Add(this.tabProducts);
+            this.tabControlMain.Controls.Add(this.tabOrder);
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tabControlMain.Location = new System.Drawing.Point(0, 27);
             this.tabControlMain.Name = "tabControlMain";
@@ -147,7 +152,6 @@
             // 
             // tabInventory
             // 
-            this.tabInventory.Controls.Add(this.chkStock);
             this.tabInventory.Controls.Add(this.cbxDepartment);
             this.tabInventory.Controls.Add(this.label4);
             this.tabInventory.Controls.Add(this.label3);
@@ -155,6 +159,7 @@
             this.tabInventory.Controls.Add(this.txtSearchUPC);
             this.tabInventory.Controls.Add(this.txtSearchName);
             this.tabInventory.Controls.Add(this.dgvInventory);
+            this.tabInventory.Controls.Add(this.groupBox1);
             this.tabInventory.Location = new System.Drawing.Point(4, 22);
             this.tabInventory.Name = "tabInventory";
             this.tabInventory.Size = new System.Drawing.Size(594, 381);
@@ -162,10 +167,19 @@
             this.tabInventory.Text = "Inventory";
             this.tabInventory.UseVisualStyleBackColor = true;
             // 
+            // btnOrder
+            // 
+            this.btnOrder.Location = new System.Drawing.Point(6, 312);
+            this.btnOrder.Name = "btnOrder";
+            this.btnOrder.Size = new System.Drawing.Size(187, 38);
+            this.btnOrder.TabIndex = 11;
+            this.btnOrder.Text = "Add Selected Item to Order";
+            this.btnOrder.UseVisualStyleBackColor = true;
+            // 
             // chkStock
             // 
             this.chkStock.AutoSize = true;
-            this.chkStock.Location = new System.Drawing.Point(406, 48);
+            this.chkStock.Location = new System.Drawing.Point(10, 10);
             this.chkStock.Name = "chkStock";
             this.chkStock.Size = new System.Drawing.Size(147, 17);
             this.chkStock.TabIndex = 10;
@@ -177,7 +191,7 @@
             // 
             this.cbxDepartment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxDepartment.FormattingEnabled = true;
-            this.cbxDepartment.Location = new System.Drawing.Point(451, 12);
+            this.cbxDepartment.Location = new System.Drawing.Point(451, 8);
             this.cbxDepartment.Name = "cbxDepartment";
             this.cbxDepartment.Size = new System.Drawing.Size(121, 21);
             this.cbxDepartment.TabIndex = 9;
@@ -186,7 +200,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(362, 16);
+            this.label4.Location = new System.Drawing.Point(362, 12);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(93, 13);
             this.label4.TabIndex = 8;
@@ -195,7 +209,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(182, 16);
+            this.label3.Location = new System.Drawing.Point(182, 12);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(72, 13);
             this.label3.TabIndex = 7;
@@ -204,7 +218,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 16);
+            this.label2.Location = new System.Drawing.Point(3, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(78, 13);
             this.label2.TabIndex = 6;
@@ -212,7 +226,7 @@
             // 
             // txtSearchUPC
             // 
-            this.txtSearchUPC.Location = new System.Drawing.Point(256, 13);
+            this.txtSearchUPC.Location = new System.Drawing.Point(256, 9);
             this.txtSearchUPC.Name = "txtSearchUPC";
             this.txtSearchUPC.Size = new System.Drawing.Size(100, 20);
             this.txtSearchUPC.TabIndex = 4;
@@ -220,7 +234,7 @@
             // 
             // txtSearchName
             // 
-            this.txtSearchName.Location = new System.Drawing.Point(80, 13);
+            this.txtSearchName.Location = new System.Drawing.Point(80, 9);
             this.txtSearchName.Name = "txtSearchName";
             this.txtSearchName.Size = new System.Drawing.Size(96, 20);
             this.txtSearchName.TabIndex = 3;
@@ -230,25 +244,24 @@
             // 
             this.dgvInventory.AllowUserToAddRows = false;
             this.dgvInventory.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle13.BackColor = System.Drawing.Color.Silver;
-            this.dgvInventory.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
-            this.dgvInventory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
+            this.dgvInventory.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvInventory.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvInventory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.Gray;
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvInventory.DefaultCellStyle = dataGridViewCellStyle14;
-            this.dgvInventory.Location = new System.Drawing.Point(0, 39);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvInventory.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvInventory.Location = new System.Drawing.Point(0, 35);
             this.dgvInventory.Name = "dgvInventory";
             this.dgvInventory.ReadOnly = true;
             this.dgvInventory.RowHeadersVisible = false;
             this.dgvInventory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvInventory.Size = new System.Drawing.Size(400, 342);
+            this.dgvInventory.Size = new System.Drawing.Size(403, 346);
             this.dgvInventory.TabIndex = 0;
             // 
             // tabProducts
@@ -275,26 +288,45 @@
             // 
             this.dgvProducts.AllowUserToAddRows = false;
             this.dgvProducts.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle15.BackColor = System.Drawing.Color.Silver;
-            this.dgvProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Silver;
+            this.dgvProducts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvProducts.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvProducts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.Gray;
-            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvProducts.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvProducts.DefaultCellStyle = dataGridViewCellStyle4;
             this.dgvProducts.Dock = System.Windows.Forms.DockStyle.Left;
             this.dgvProducts.Location = new System.Drawing.Point(0, 0);
             this.dgvProducts.Name = "dgvProducts";
             this.dgvProducts.ReadOnly = true;
             this.dgvProducts.RowHeadersVisible = false;
             this.dgvProducts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvProducts.Size = new System.Drawing.Size(338, 381);
+            this.dgvProducts.Size = new System.Drawing.Size(475, 381);
             this.dgvProducts.TabIndex = 1;
+            // 
+            // tabOrder
+            // 
+            this.tabOrder.Location = new System.Drawing.Point(4, 22);
+            this.tabOrder.Name = "tabOrder";
+            this.tabOrder.Size = new System.Drawing.Size(594, 381);
+            this.tabOrder.TabIndex = 2;
+            this.tabOrder.Text = "Order Products";
+            this.tabOrder.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnOrder);
+            this.groupBox1.Controls.Add(this.chkStock);
+            this.groupBox1.Location = new System.Drawing.Point(398, 28);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 357);
+            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabStop = false;
             // 
             // frmMain
             // 
@@ -316,6 +348,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventory)).EndInit();
             this.tabProducts.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -345,6 +379,9 @@
         private System.Windows.Forms.ComboBox cbxDepartment;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox chkStock;
+        private System.Windows.Forms.Button btnOrder;
+        private System.Windows.Forms.TabPage tabOrder;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

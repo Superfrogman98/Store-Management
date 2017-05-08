@@ -47,7 +47,7 @@ namespace Store_Management
         }
 
         //fills the inventory table
-        public void fillInventoryTable(string error)
+        public int fillInventoryTable(string error)
         {
             try
             {
@@ -70,11 +70,13 @@ namespace Store_Management
             catch (Exception)
             {
                 MessageBox.Show(error);
+                return 1;
             }
+            return 0;
         }
 
         //fills the product table
-        public void fillProductTable(string error)
+        public int fillProductTable(string error)
         {
             try
             {
@@ -102,8 +104,9 @@ namespace Store_Management
             catch (Exception)
             {
                 MessageBox.Show(error);
+                return 1;
             }
-
+            return 0;
         }
 
         //fills the dropdown box filter for departments from the database
@@ -164,13 +167,22 @@ namespace Store_Management
                     //trys filling the table from the database the user selected, upon fail the catch will causes the connection string to switch to the default database
 
                     connection.ConnectionString = connectionString;
-                    fillAllTables("New Database does not have the required fields for Inventory", "New Database does not have the required fields for Products");
-                    Properties.Settings.Default.Database = connectionString;
-                    MessageBox.Show("New Connection Successful");
+                    if(fillAllTables("New Database does not have the required fields for Inventory", "New Database does not have the required fields for Products") == 0)
+                    {
+                        Properties.Settings.Default.Database = connectionString;
+                        MessageBox.Show("New Connection Successful");
+                    }
+                    else
+                    {
+                        connection.Close();
+                        MessageBox.Show("New database connection failed");
+                        connection.ConnectionString = defaultConnection;
+                    }    
                 }
             }
             catch (Exception)
             {
+                connection.Close();
                 MessageBox.Show("New database connection failed");
                 connection.ConnectionString = defaultConnection;
                 fillAllTables("Inventory data could not be recieved", "Product data could not be recieved");
@@ -178,11 +190,13 @@ namespace Store_Management
         }
 
         //function for when all tables need to be refreshed
-        private void fillAllTables(string msg1, string msg2)
+        private int fillAllTables(string msg1, string msg2)
         {
-            fillInventoryTable(msg1);
-            fillProductTable(msg2);
+            int success = 0;
+            success = fillInventoryTable(msg1);
+            success = fillProductTable(msg2);
             setupDepartmentFilter();
+            return success;
         }
 
 
