@@ -22,7 +22,6 @@ namespace Store_Management
         BindingSource inventoryBindingSource = new BindingSource();
         BindingSource productBindingSource = new BindingSource();
         BindingSource departmentBindingSource = new BindingSource();
-        int inventorySort = 0;
         String defaultConnection = "";//string for holding the default connenction string to the built in database;
         public frmMain()
         {
@@ -124,13 +123,17 @@ namespace Store_Management
                 getDepartments.Dispose();
                 connection.Close();
                 departmentBindingSource.DataSource = ds.Tables[0].DefaultView;
-                cbxDepartment.DataSource = departmentBindingSource;    
-                cbxDepartment.DisplayMember = "DepartmentName";
-                cbxDepartment.ValueMember = "DepartmentName";
                 DataRow newRow = ds.Tables[0].NewRow();
                 newRow[0] = "<No Filter>";
                 newRow[1] = 0;
                 ds.Tables[0].Rows.InsertAt(newRow,0);
+                //sets the binding sources and members of the different comboboxes, this ends up tieing them together, If one is changed the other is too
+                cbxDepartment.DataSource = departmentBindingSource;    
+                cbxDepartment.DisplayMember = "DepartmentName";
+                cbxDepartment.ValueMember = "DepartmentName";
+                cbxProductDepartment.DataSource = departmentBindingSource;
+                cbxProductDepartment.DisplayMember = "DepartmentName";
+                cbxProductDepartment.ValueMember = "DepartmentName";
             }
             catch (Exception)
             {
@@ -272,15 +275,15 @@ namespace Store_Management
             // removes existing filter, then rebuilds the filter 
             productBindingSource.RemoveFilter();
             dgvProducts.ClearSelection();
-            if (cbxDepartment.SelectedIndex > 0)
+            if (cbxProductDepartment.SelectedIndex > 0)
             {
                 productBindingSource.Filter = addToFilter("DepartmentName = '" + cbxProductDepartment.SelectedValue.ToString() + "'", productBindingSource.Filter);
             }
-            if (txtSearchName.Text.Trim() != "")
+            if (txtSearchProductName.Text.Trim() != "")
             {
                 productBindingSource.Filter = addToFilter("ProductName LIKE '" + txtSearchProductName.Text.Trim() + "*'", productBindingSource.Filter);
             }
-            if (txtSearchUPC.Text.Trim() != "")
+            if (txtSearchProductUPC.Text.Trim() != "")
             {
                 productBindingSource.Filter = addToFilter("UPC LIKE '" + txtSearchProductUPC.Text.Trim() + "*'", productBindingSource.Filter);
             }
@@ -319,23 +322,31 @@ namespace Store_Management
         //fills the product labels on the right when the selected cell changes
         private void dgvProducts_SelectionChanged(object sender, EventArgs e)
         {
+            txtName.ReadOnly = true;
+            txtUPC.ReadOnly = true;
+            txtDepartment.ReadOnly = true;
+            txtSell.ReadOnly = true;
+            txtBuy.ReadOnly = true;
+            btnEdit.Text = "Edit Selected Product";
+            btnSubmit.Enabled = false;
+            btnDelete.Enabled = false;
             try
             {
 
-                lblProductName.Text = dgvProducts.SelectedRows[0].Cells[0].Value.ToString();
-                lblProductUPC.Text = dgvProducts.SelectedRows[0].Cells[1].Value.ToString();
-                lblProductDepartment.Text = dgvProducts.SelectedRows[0].Cells[2].Value.ToString();
-                lblSell.Text = dgvProducts.SelectedRows[0].Cells[3].Value.ToString();
-                lblBuy.Text = dgvProducts.SelectedRows[0].Cells[3].Value.ToString();
+                txtName.Text = dgvProducts.SelectedRows[0].Cells[0].Value.ToString();
+                txtUPC.Text = dgvProducts.SelectedRows[0].Cells[1].Value.ToString();
+                txtDepartment.Text = dgvProducts.SelectedRows[0].Cells[2].Value.ToString();
+                txtSell.Text = dgvProducts.SelectedRows[0].Cells[3].Value.ToString();
+                txtBuy.Text = dgvProducts.SelectedRows[0].Cells[3].Value.ToString();
+                btnSubmitNew.Enabled = false;
             }
             catch (Exception)
             {
-
-                lblProductName.Text = " ";
-                lblProductUPC.Text = " ";
-                lblProductDepartment.Text = " ";
-                lblSell.Text = " ";
-                lblBuy.Text = " ";
+                txtName.Text = " ";
+                txtUPC.Text = " ";
+                txtDepartment.Text = " ";
+                txtSell.Text = " ";
+                txtBuy.Text = " ";
             }
         }
         //makes the product filtering function be called when the filter fields are changed
@@ -352,6 +363,47 @@ namespace Store_Management
         private void cbxProductDepartment_SelectedIndexChanged(object sender, EventArgs e)
         {
             handleProductFiltering();
+            
+        }
+
+        //allows edit of product data
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (btnEdit.Text != "Stop Editing")
+            {
+                txtName.ReadOnly = false;
+                txtUPC.ReadOnly = false;
+                txtDepartment.ReadOnly = false;
+                txtSell.ReadOnly = false;
+                txtBuy.ReadOnly = false;
+                btnEdit.Text = "Stop Editing";
+                btnSubmit.Enabled = true;
+                btnDelete.Enabled = true;
+            }
+            else
+            {
+                txtName.ReadOnly = true;
+                txtUPC.ReadOnly = true;
+                txtDepartment.ReadOnly = true;
+                txtSell.ReadOnly = true;
+                txtBuy.ReadOnly = true;
+                btnEdit.Text = "Edit Selected Product";
+                btnSubmit.Enabled = false;
+                btnDelete.Enabled = false;
+            }
+           
+        }
+
+        //allows creation of a new product
+        private void btnCreate_Click(object sender, EventArgs e)
+        {
+            dgvProducts.ClearSelection();
+            txtName.ReadOnly = false;
+            txtUPC.ReadOnly = false;
+            txtDepartment.ReadOnly = false;
+            txtSell.ReadOnly = false;
+            txtBuy.ReadOnly = false;
+            btnSubmitNew.Enabled = true;
         }
     }
 }
