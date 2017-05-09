@@ -240,8 +240,9 @@ namespace Store_Management
         //function to handle all the filters on the inventory, allows for combo filters
         private void handleInventoryFiltering()
         {
-            inventoryBindingSource.RemoveFilter(); // removes existing filter, lower code rebuilds a filter where applicable
-
+            // removes existing filter, then rebuilds the filter 
+            inventoryBindingSource.RemoveFilter();
+            dgvInventory.ClearSelection();
             if (cbxDepartment.SelectedIndex > 0)
             {
                 inventoryBindingSource.Filter = addToFilter("DepartmentName = '" + cbxDepartment.SelectedValue.ToString() + "'", inventoryBindingSource.Filter);
@@ -249,6 +250,10 @@ namespace Store_Management
             if(chkStock.Checked == true)
             {
                 inventoryBindingSource.Filter = addToFilter("Instock = 0", inventoryBindingSource.Filter);
+            }
+            else
+            {
+                inventoryBindingSource.Filter = addToFilter("Instock >= 0", inventoryBindingSource.Filter);
             }
             if(txtSearchName.Text.Trim() != "")
             {
@@ -258,24 +263,95 @@ namespace Store_Management
             {
                 inventoryBindingSource.Filter = addToFilter("UPC LIKE '" + txtSearchUPC.Text.Trim() + "*'", inventoryBindingSource.Filter);
             }
+            dgvInventory.Refresh();
+        }
 
+        //function to handle all the filters on the inventory, allows for combo filters
+        private void handleProductFiltering()
+        {
+            // removes existing filter, then rebuilds the filter 
+            productBindingSource.RemoveFilter();
+            dgvProducts.ClearSelection();
+            if (cbxDepartment.SelectedIndex > 0)
+            {
+                productBindingSource.Filter = addToFilter("DepartmentName = '" + cbxProductDepartment.SelectedValue.ToString() + "'", productBindingSource.Filter);
+            }
+            if (txtSearchName.Text.Trim() != "")
+            {
+                productBindingSource.Filter = addToFilter("ProductName LIKE '" + txtSearchProductName.Text.Trim() + "*'", productBindingSource.Filter);
+            }
+            if (txtSearchUPC.Text.Trim() != "")
+            {
+                productBindingSource.Filter = addToFilter("UPC LIKE '" + txtSearchProductUPC.Text.Trim() + "*'", productBindingSource.Filter);
+            }
+            dgvProducts.Refresh();
         }
 
 
         //displays the data from the datagridview on the right and sets up data for it to be added to the order form
         private void dgvInventory_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvInventory.SelectedRows[0].Index > -1)
-            {
-                lblName.Text = dgvInventory.SelectedRows[0].Cells[0].Value.ToString();
-                lblUPC.Text = dgvInventory.SelectedRows[0].Cells[1].Value.ToString();
-                lblDepartment.Text = dgvInventory.SelectedRows[0].Cells[2].Value.ToString();
-                lblInstock.Text = dgvInventory.SelectedRows[0].Cells[3].Value.ToString();
-            }
+           
+                try
+                {
+           
+                    lblName.Text = dgvInventory.SelectedRows[0].Cells[0].Value.ToString();
+                    lblUPC.Text = dgvInventory.SelectedRows[0].Cells[1].Value.ToString();
+                    lblDepartment.Text = dgvInventory.SelectedRows[0].Cells[2].Value.ToString();
+                    lblInstock.Text = dgvInventory.SelectedRows[0].Cells[3].Value.ToString();
+                }
+                catch (Exception)
+                {
+
+                    lblName.Text = " ";
+                    lblUPC.Text = " ";
+                    lblDepartment.Text = " ";
+                    lblInstock.Text = " ";
+                }
         }
 
-        private void dgvInventory_SortRows(object sender, DataGridViewCellMouseEventArgs e)
+        //adds the selected inventory item to the order form
+        private void btnOrder_Click(object sender, EventArgs e)
         {
+
+        }
+
+        //fills the product labels on the right when the selected cell changes
+        private void dgvProducts_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+
+                lblProductName.Text = dgvProducts.SelectedRows[0].Cells[0].Value.ToString();
+                lblProductUPC.Text = dgvProducts.SelectedRows[0].Cells[1].Value.ToString();
+                lblProductDepartment.Text = dgvProducts.SelectedRows[0].Cells[2].Value.ToString();
+                lblSell.Text = dgvProducts.SelectedRows[0].Cells[3].Value.ToString();
+                lblBuy.Text = dgvProducts.SelectedRows[0].Cells[3].Value.ToString();
+            }
+            catch (Exception)
+            {
+
+                lblProductName.Text = " ";
+                lblProductUPC.Text = " ";
+                lblProductDepartment.Text = " ";
+                lblSell.Text = " ";
+                lblBuy.Text = " ";
+            }
+        }
+        //makes the product filtering function be called when the filter fields are changed
+        private void txtSearchProductName_TextChanged(object sender, EventArgs e)
+        {
+            handleProductFiltering();
+        }
+
+        private void txtSearchProductUPC_TextChanged(object sender, EventArgs e)
+        {
+            handleProductFiltering();
+        }
+
+        private void cbxProductDepartment_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            handleProductFiltering();
         }
     }
 }
