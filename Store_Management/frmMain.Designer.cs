@@ -81,12 +81,12 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.txtUPC = new System.Windows.Forms.TextBox();
             this.txtDepartment = new System.Windows.Forms.TextBox();
-            this.txtSell = new System.Windows.Forms.TextBox();
-            this.txtBuy = new System.Windows.Forms.TextBox();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.btnCreate = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnSubmitNew = new System.Windows.Forms.Button();
+            this.nudBuy = new System.Windows.Forms.NumericUpDown();
+            this.nudSell = new System.Windows.Forms.NumericUpDown();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabInventory.SuspendLayout();
@@ -94,6 +94,8 @@
             this.groupBox1.SuspendLayout();
             this.tabProducts.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBuy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSell)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -412,12 +414,12 @@
             // 
             // tabProducts
             // 
+            this.tabProducts.Controls.Add(this.nudSell);
+            this.tabProducts.Controls.Add(this.nudBuy);
             this.tabProducts.Controls.Add(this.btnSubmitNew);
             this.tabProducts.Controls.Add(this.btnDelete);
             this.tabProducts.Controls.Add(this.btnCreate);
             this.tabProducts.Controls.Add(this.btnSubmit);
-            this.tabProducts.Controls.Add(this.txtBuy);
-            this.tabProducts.Controls.Add(this.txtSell);
             this.tabProducts.Controls.Add(this.txtDepartment);
             this.tabProducts.Controls.Add(this.txtUPC);
             this.tabProducts.Controls.Add(this.txtName);
@@ -500,18 +502,18 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(411, 153);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(55, 13);
+            this.label14.Size = new System.Drawing.Size(64, 13);
             this.label14.TabIndex = 31;
-            this.label14.Text = "Buy Cost: ";
+            this.label14.Text = "Buy Cost:  $";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(411, 130);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(57, 13);
+            this.label9.Size = new System.Drawing.Size(66, 13);
             this.label9.TabIndex = 29;
-            this.label9.Text = "Sell Price: ";
+            this.label9.Text = "Sell Price:  $";
             // 
             // label5
             // 
@@ -611,22 +613,6 @@
             this.txtDepartment.Size = new System.Drawing.Size(100, 20);
             this.txtDepartment.TabIndex = 42;
             // 
-            // txtSell
-            // 
-            this.txtSell.Location = new System.Drawing.Point(485, 127);
-            this.txtSell.Name = "txtSell";
-            this.txtSell.ReadOnly = true;
-            this.txtSell.Size = new System.Drawing.Size(100, 20);
-            this.txtSell.TabIndex = 43;
-            // 
-            // txtBuy
-            // 
-            this.txtBuy.Location = new System.Drawing.Point(485, 150);
-            this.txtBuy.Name = "txtBuy";
-            this.txtBuy.ReadOnly = true;
-            this.txtBuy.Size = new System.Drawing.Size(100, 20);
-            this.txtBuy.TabIndex = 44;
-            // 
             // btnSubmit
             // 
             this.btnSubmit.Enabled = false;
@@ -636,6 +622,7 @@
             this.btnSubmit.TabIndex = 45;
             this.btnSubmit.Text = "Submit Changes";
             this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // btnCreate
             // 
@@ -667,6 +654,23 @@
             this.btnSubmitNew.Text = "Submit New Product";
             this.btnSubmitNew.UseVisualStyleBackColor = true;
             // 
+            // nudBuy
+            // 
+            this.nudBuy.DecimalPlaces = 2;
+            this.nudBuy.Location = new System.Drawing.Point(481, 151);
+            this.nudBuy.Name = "nudBuy";
+            this.nudBuy.Size = new System.Drawing.Size(105, 20);
+            this.nudBuy.TabIndex = 49;
+            // 
+            // nudSell
+            // 
+            this.nudSell.DecimalPlaces = 2;
+            this.nudSell.Location = new System.Drawing.Point(483, 128);
+            this.nudSell.Name = "nudSell";
+            this.nudSell.ReadOnly = true;
+            this.nudSell.Size = new System.Drawing.Size(103, 20);
+            this.nudSell.TabIndex = 50;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -690,6 +694,8 @@
             this.tabProducts.ResumeLayout(false);
             this.tabProducts.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProducts)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBuy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSell)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -744,14 +750,14 @@
         private System.Windows.Forms.TextBox txtSearchProductName;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Button btnEdit;
-        private System.Windows.Forms.TextBox txtBuy;
-        private System.Windows.Forms.TextBox txtSell;
         private System.Windows.Forms.TextBox txtDepartment;
         private System.Windows.Forms.TextBox txtUPC;
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnCreate;
         private System.Windows.Forms.Button btnSubmitNew;
+        private System.Windows.Forms.NumericUpDown nudSell;
+        private System.Windows.Forms.NumericUpDown nudBuy;
     }
 }
 

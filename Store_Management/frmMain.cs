@@ -325,8 +325,8 @@ namespace Store_Management
             txtName.ReadOnly = true;
             txtUPC.ReadOnly = true;
             txtDepartment.ReadOnly = true;
-            txtSell.ReadOnly = true;
-            txtBuy.ReadOnly = true;
+            nudSell.ReadOnly = true;
+            nudBuy.ReadOnly = true;
             btnEdit.Text = "Edit Selected Product";
             btnSubmit.Enabled = false;
             btnDelete.Enabled = false;
@@ -336,8 +336,8 @@ namespace Store_Management
                 txtName.Text = dgvProducts.SelectedRows[0].Cells[0].Value.ToString();
                 txtUPC.Text = dgvProducts.SelectedRows[0].Cells[1].Value.ToString();
                 txtDepartment.Text = dgvProducts.SelectedRows[0].Cells[2].Value.ToString();
-                txtSell.Text = dgvProducts.SelectedRows[0].Cells[3].Value.ToString();
-                txtBuy.Text = dgvProducts.SelectedRows[0].Cells[3].Value.ToString();
+                nudSell.Value = Convert.ToDecimal(dgvProducts.SelectedRows[0].Cells[3].Value);
+                nudBuy.Value = Convert.ToDecimal(dgvProducts.SelectedRows[0].Cells[4].Value);
                 btnSubmitNew.Enabled = false;
             }
             catch (Exception)
@@ -345,10 +345,11 @@ namespace Store_Management
                 txtName.Text = " ";
                 txtUPC.Text = " ";
                 txtDepartment.Text = " ";
-                txtSell.Text = " ";
-                txtBuy.Text = " ";
+                nudSell.Value = 0.00M;
+                nudBuy.Value = 0.00M;
             }
         }
+
         //makes the product filtering function be called when the filter fields are changed
         private void txtSearchProductName_TextChanged(object sender, EventArgs e)
         {
@@ -374,8 +375,8 @@ namespace Store_Management
                 txtName.ReadOnly = false;
                 txtUPC.ReadOnly = false;
                 txtDepartment.ReadOnly = false;
-                txtSell.ReadOnly = false;
-                txtBuy.ReadOnly = false;
+                nudSell.ReadOnly = false;
+                nudBuy.ReadOnly = false;
                 btnEdit.Text = "Stop Editing";
                 btnSubmit.Enabled = true;
                 btnDelete.Enabled = true;
@@ -385,8 +386,8 @@ namespace Store_Management
                 txtName.ReadOnly = true;
                 txtUPC.ReadOnly = true;
                 txtDepartment.ReadOnly = true;
-                txtSell.ReadOnly = true;
-                txtBuy.ReadOnly = true;
+                nudSell.ReadOnly = true;
+                nudBuy.ReadOnly = true;
                 btnEdit.Text = "Edit Selected Product";
                 btnSubmit.Enabled = false;
                 btnDelete.Enabled = false;
@@ -401,9 +402,26 @@ namespace Store_Management
             txtName.ReadOnly = false;
             txtUPC.ReadOnly = false;
             txtDepartment.ReadOnly = false;
-            txtSell.ReadOnly = false;
-            txtBuy.ReadOnly = false;
+            nudSell.ReadOnly = false;
+            nudBuy.ReadOnly = false;
             btnSubmitNew.Enabled = true;
         }
+
+        //submits changes to an existing product
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
+            //checks for fields to be valid before updating data
+            if(txtName.Text.Trim() != "")
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("Product Name should not be blank");
+            }
+        }
+
+        
+
     }
 }
