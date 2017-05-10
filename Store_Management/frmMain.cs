@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
 using System.IO;
-
+using DGVPrinterHelper;
 namespace Store_Management
 {
     public partial class frmMain : Form
@@ -22,6 +22,7 @@ namespace Store_Management
         BindingSource inventoryBindingSource = new BindingSource();
         BindingSource productBindingSource = new BindingSource();
         BindingSource departmentBindingSource = new BindingSource();
+        BindingSource departmentSelectBindingSource = new BindingSource();
         String defaultConnection = "";//string for holding the default connenction string to the built in database;
         public frmMain()
         {
@@ -36,6 +37,8 @@ namespace Store_Management
             connection.ConnectionString = defaultConnection;
 
            fillAllTables("Inventory data could not be recieved", "Product data could not be recieved");
+            setupDepartmentFilter();
+            setupDepartmentSelect();
             cbxDepartment.SelectedIndex = 0;
         }
 
@@ -197,8 +200,7 @@ namespace Store_Management
         {
             int success = 0;
             success = fillInventoryTable(msg1);
-            success = fillProductTable(msg2);
-            setupDepartmentFilter();
+            success = fillProductTable(msg2); 
             return success;
         }
 
@@ -324,7 +326,7 @@ namespace Store_Management
         {
             txtName.ReadOnly = true;
             txtUPC.ReadOnly = true;
-            txtDepartment.ReadOnly = true;
+            cbxSelectDepartment.Enabled = false;
             nudSell.ReadOnly = true;
             nudBuy.ReadOnly = true;
             btnEdit.Text = "Edit Selected Product";
@@ -335,7 +337,7 @@ namespace Store_Management
 
                 txtName.Text = dgvProducts.SelectedRows[0].Cells[0].Value.ToString();
                 txtUPC.Text = dgvProducts.SelectedRows[0].Cells[1].Value.ToString();
-                txtDepartment.Text = dgvProducts.SelectedRows[0].Cells[2].Value.ToString();
+                cbxSelectDepartment.SelectedValue = dgvProducts.SelectedRows[0].Cells[2].Value.ToString();
                 nudSell.Value = Convert.ToDecimal(dgvProducts.SelectedRows[0].Cells[3].Value);
                 nudBuy.Value = Convert.ToDecimal(dgvProducts.SelectedRows[0].Cells[4].Value);
                 btnSubmitNew.Enabled = false;
@@ -344,7 +346,7 @@ namespace Store_Management
             {
                 txtName.Text = " ";
                 txtUPC.Text = " ";
-                txtDepartment.Text = " ";
+                cbxSelectDepartment.SelectedIndex = 0;
                 nudSell.Value = 0.00M;
                 nudBuy.Value = 0.00M;
             }
@@ -374,7 +376,7 @@ namespace Store_Management
             {
                 txtName.ReadOnly = false;
                 txtUPC.ReadOnly = false;
-                txtDepartment.ReadOnly = false;
+                cbxSelectDepartment.Enabled = true;
                 nudSell.ReadOnly = false;
                 nudBuy.ReadOnly = false;
                 btnEdit.Text = "Stop Editing";
@@ -385,12 +387,13 @@ namespace Store_Management
             {
                 txtName.ReadOnly = true;
                 txtUPC.ReadOnly = true;
-                txtDepartment.ReadOnly = true;
+                cbxSelectDepartment.Enabled = false;
                 nudSell.ReadOnly = true;
                 nudBuy.ReadOnly = true;
                 btnEdit.Text = "Edit Selected Product";
                 btnSubmit.Enabled = false;
                 btnDelete.Enabled = false;
+                dgvProducts_SelectionChanged(dgvProducts, EventArgs.Empty);//resets the displayed data to the selected product if changes weren't submitted
             }
            
         }
@@ -401,7 +404,7 @@ namespace Store_Management
             dgvProducts.ClearSelection();
             txtName.ReadOnly = false;
             txtUPC.ReadOnly = false;
-            txtDepartment.ReadOnly = false;
+            cbxSelectDepartment.Enabled = true;
             nudSell.ReadOnly = false;
             nudBuy.ReadOnly = false;
             btnSubmitNew.Enabled = true;
@@ -413,7 +416,34 @@ namespace Store_Management
             //checks for fields to be valid before updating data
             if(txtName.Text.Trim() != "")
             {
-
+                if (txtUPC.Text.Trim() != "")
+                {
+                    try
+                    {
+                        connection.Open(); // connects to the database
+                        OleDbCommand updateProduct = new OleDbCommand();  // sets up a new command
+                        updateProduct.Connection = connection;  // sets the connection of the command
+                        updateProduct.CommandText = "UPDATE Products SET ProductName = ?, UPC = ?,Department = ?, SellPrice = ?, BuyCost = ? WHERE UPC = ?"; // the sql of the command, this one updates a products info
+                        updateProduct.Parameters.AddWithValue("ProductName",txtName.Text.Trim());
+                        updateProduct.Parameters.AddWithValue("UPC", txtUPC.Text.Trim());
+                        updateProduct.Parameters.AddWithValue("Department", cbxSelectDepartment.SelectedIndex +1);
+                        updateProduct.Parameters.AddWithValue("SellPrice", nudSell.Value);
+                        updateProduct.Parameters.AddWithValue("BuyCost", nudBuy.Value);
+                        updateProduct.Parameters.AddWithValue("UPC", dgvProducts.SelectedRows[0].Cells[1].Value.ToString());
+                        updateProduct.ExecuteNonQuery();
+                        updateProduct.Dispose();
+                        connection.Close();
+                        fillAllTables("Inventory data could not be recieved", "Product data could not be recieved");
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show("Product Data Could not be updated " + exc);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Product UPC should not be blank");
+                }
             }
             else
             {
@@ -421,7 +451,53 @@ namespace Store_Management
             }
         }
 
-        
+        //fills the dropdown box filter for departments from the database
+        public void setupDepartmentSelect()
+        {
+            try
+            {
+                connection.Open(); // connects to the database
+                OleDbCommand getDepartments = new OleDbCommand();
+                getDepartments.Connection = connection;
+                getDepartments.CommandText = "SELECT DepartmentName,ID FROM Departments";
+                OleDbDataAdapter adap = new OleDbDataAdapter(getDepartments);
+                DataSet depDS = new DataSet();
+                adap.Fill(depDS);
+                getDepartments.Dispose();
+                connection.Close();
+                departmentSelectBindingSource.DataSource = depDS.Tables[0].DefaultView;
+                //sets the binding sources and members of the selection comboboxes
+                cbxSelectDepartment.DataSource = departmentSelectBindingSource;
+                cbxSelectDepartment.DisplayMember = "DepartmentName";
+                cbxSelectDepartment.ValueMember = "DepartmentName";
+            
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Department data could not be found");
+            }
+        }
+
+        //prints the inventory datagridview
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            DGVPrinter printer = new DGVPrinter();
+
+            printer.Title = "Store Inventory Report";
+            printer.SubTitle = "Report printed on : " + DateTime.Now ;
+            printer.SubTitleFormatFlags = StringFormatFlags.LineLimit |
+
+                                          StringFormatFlags.NoClip;
+
+            printer.PageNumbers = true;
+
+            printer.PageNumberInHeader = false;
+
+            printer.PorportionalColumns = true;
+
+            printer.HeaderCellAlignment = StringAlignment.Near;
+            printer.PrintPreviewDataGridView(dgvInventory);
+        }
 
     }
 }
