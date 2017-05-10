@@ -424,9 +424,9 @@ namespace Store_Management
                         OleDbCommand updateProduct = new OleDbCommand();  // sets up a new command
                         updateProduct.Connection = connection;  // sets the connection of the command
                         updateProduct.CommandText = "UPDATE Products SET ProductName = ?, UPC = ?,Department = ?, SellPrice = ?, BuyCost = ? WHERE UPC = ?"; // the sql of the command, this one updates a products info
-                        updateProduct.Parameters.AddWithValue("ProductName",txtName.Text.Trim());
+                        updateProduct.Parameters.AddWithValue("ProductName", txtName.Text.Trim());
                         updateProduct.Parameters.AddWithValue("UPC", txtUPC.Text.Trim());
-                        updateProduct.Parameters.AddWithValue("Department", cbxSelectDepartment.SelectedIndex +1);
+                        updateProduct.Parameters.AddWithValue("Department", cbxSelectDepartment.SelectedIndex + 1);
                         updateProduct.Parameters.AddWithValue("SellPrice", nudSell.Value);
                         updateProduct.Parameters.AddWithValue("BuyCost", nudBuy.Value);
                         updateProduct.Parameters.AddWithValue("UPC", dgvProducts.SelectedRows[0].Cells[1].Value.ToString());
@@ -435,9 +435,9 @@ namespace Store_Management
                         connection.Close();
                         fillAllTables("Inventory data could not be recieved", "Product data could not be recieved");
                     }
-                    catch (Exception exc)
+                    catch (Exception)
                     {
-                        MessageBox.Show("Product Data Could not be updated " + exc);
+                        MessageBox.Show("Product Data Could not be updated ");
                     }
                 }
                 else
@@ -496,8 +496,51 @@ namespace Store_Management
             printer.PorportionalColumns = true;
 
             printer.HeaderCellAlignment = StringAlignment.Near;
-            printer.PrintPreviewDataGridView(dgvInventory);
+            printer.PrintDataGridView(dgvProducts);
         }
+        //deletes a product, checks for existing inventory before removeing it
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                connection.Open(); // connects to the database
+                OleDbCommand checkInventory = new OleDbCommand();
+                checkInventory.Connection = connection;
+                checkInventory.CommandText = "Select Instock FROM Products WHERE UPC = ?";
+                checkInventory.Parameters.AddWithValue("UPC", dgvProducts.SelectedRows[0].Cells[1].Value.ToString());
 
+                OleDbDataReader reader = checkInventory.ExecuteReader();
+
+                reader.Read();
+                int instock = Convert.ToInt32(reader.GetValue(0));
+                checkInventory.Dispose();
+                reader.Close();
+
+
+                if(instock == 0)
+                {
+                    OleDbCommand deleteProduct = new OleDbCommand();  // sets up a new command
+                    deleteProduct.Connection = connection;  // sets the connection of the command
+                    deleteProduct.CommandText = "Delete FROM Products WHERE UPC = ?"; // the sql of the command, this one deletes a product
+                    deleteProduct.Parameters.AddWithValue("UPC", dgvProducts.SelectedRows[0].Cells[1].Value.ToString());
+                    deleteProduct.ExecuteNonQuery();
+                    deleteProduct.Dispose();
+                    connection.Close();
+                    fillAllTables("Inventory data could not be recieved", "Product data could not be recieved");
+                    MessageBox.Show("Product was successfuly removed");
+                }
+                else
+                {
+                    MessageBox.Show("Product with inventory left cannot be deleted");
+                    connection.Close();  
+                }
+                
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show("Product could not be removed" + exp);
+                connection.Close();
+            }
+        }
     }
 }
