@@ -23,6 +23,10 @@ namespace Store_Management
         BindingSource productBindingSource = new BindingSource();
         BindingSource departmentBindingSource = new BindingSource();
         BindingSource departmentSelectBindingSource = new BindingSource();
+        BindingSource supplierBindingSource = new BindingSource();
+        BindingSource supplierSelectBindingSource = new BindingSource();
+
+
         String defaultConnection = "";//string for holding the default connenction string to the built in database;
         public frmMain()
         {
@@ -36,10 +40,13 @@ namespace Store_Management
 
             connection.ConnectionString = defaultConnection;
 
-           fillAllTables("Inventory data could not be recieved", "Product data could not be recieved");
+            fillAllTables("Inventory data could not be recieved", "Product data could not be recieved");
             setupDepartmentFilter();
             setupDepartmentSelect();
+            setupSupplierFilter();
+            setupSupplierSelect();
             cbxDepartment.SelectedIndex = 0;
+            cbxProductSupplier.SelectedIndex = 0;
         }
 
         //closes the form
@@ -85,7 +92,7 @@ namespace Store_Management
                 connection.Open(); // connects to the database
                 OleDbCommand getInventory = new OleDbCommand(); // sets up a new command
                 getInventory.Connection = connection; // sets the connection of the command
-                getInventory.CommandText = "SELECT Products.ProductName, Products.UPC, Departments.DepartmentName, Products.SellPrice, Products.BuyCost, Products.Instock FROM Products INNER JOIN Departments ON Products.Department = Departments.ID"; // the sql of the command, this one joins the products and department tables using the department id to get the name of the dapartment.
+                getInventory.CommandText = "SELECT Products.ProductName, Products.UPC, Departments.DepartmentName, Products.SellPrice, Products.BuyCost, Suppliers.SupplierName, Products.Instock FROM Departments INNER JOIN (Suppliers INNER JOIN Products ON Suppliers.[ID] = Products.[SupplierID]) ON Departments.ID = Products.Department"; // the sql of the command, this one joins the products and department tables using the department id to get the name of the dapartment, and also joins the tables to get the supplier name.
                 OleDbDataAdapter adap = new OleDbDataAdapter(getInventory);
                 DataSet ds = new DataSet();
                 adap.Fill(ds); //fills the datasource using the oledbcommand
@@ -98,7 +105,7 @@ namespace Store_Management
                 dgvProducts.Columns[2].HeaderText = "Department";//set column 3 
                 dgvProducts.Columns[3].HeaderText = "Sell Price";//set column 4
                 dgvProducts.Columns[4].HeaderText = "Buy Cost";//set column 5
-                dgvProducts.Columns[5].Visible = false;          
+                dgvProducts.Columns[6].Visible = false;          
                 dgvProducts.Columns[3].DefaultCellStyle.Format = "C2";
                 dgvProducts.Columns[4].DefaultCellStyle.Format = "C2";
 
@@ -143,7 +150,35 @@ namespace Store_Management
                 MessageBox.Show("Department data could not be found");
             }
         }
-
+        //fills the dropdown box filter for departments from the database
+        public void setupSupplierFilter()
+        {
+            try
+            {
+                connection.Open(); // connects to the database
+                OleDbCommand getSuppliers = new OleDbCommand();
+                getSuppliers.Connection = connection;
+                getSuppliers.CommandText = "SELECT SupplierName,ID FROM Suppliers";
+                OleDbDataAdapter adap = new OleDbDataAdapter(getSuppliers);
+                DataSet ds = new DataSet();
+                adap.Fill(ds);
+                getSuppliers.Dispose();
+                connection.Close();
+                supplierBindingSource.DataSource = ds.Tables[0].DefaultView;
+                DataRow newRow = ds.Tables[0].NewRow();
+                newRow[0] = "<No Filter>";
+                newRow[1] = 0;
+                ds.Tables[0].Rows.InsertAt(newRow, 0);
+                //sets the binding sources and members of the supplier combobox
+                cbxProductSupplier.DataSource = supplierBindingSource;
+                cbxProductSupplier.DisplayMember = "SupplierName";
+                cbxProductSupplier.ValueMember = "SupplierName";
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Supplier data could not be found");
+            }
+        }
 
         //function that allows the user to change which database they are connected to
         private void changeDatabaseToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -246,50 +281,80 @@ namespace Store_Management
         private void handleInventoryFiltering()
         {
             // removes existing filter, then rebuilds the filter 
+            //filters that use user text will currently break on ' input
             inventoryBindingSource.RemoveFilter();
             dgvInventory.ClearSelection();
-            if (cbxDepartment.SelectedIndex > 0)
+            try
             {
-                inventoryBindingSource.Filter = addToFilter("DepartmentName = '" + cbxDepartment.SelectedValue.ToString() + "'", inventoryBindingSource.Filter);
+                
+                if (cbxDepartment.SelectedIndex > 0)
+                {
+                    inventoryBindingSource.Filter = addToFilter("DepartmentName = '" + cbxDepartment.SelectedValue.ToString() + "'", inventoryBindingSource.Filter);
+                }
+                if(chkStock.Checked == true)
+                {
+                    inventoryBindingSource.Filter = addToFilter("Instock = 0", inventoryBindingSource.Filter);
+                }
+                else
+                {
+                    inventoryBindingSource.Filter = addToFilter("Instock >= 0", inventoryBindingSource.Filter);
+                }
+                if(txtSearchName.Text.Trim() != "")
+                {
+                    inventoryBindingSource.Filter = addToFilter("ProductName LIKE '" + txtSearchName.Text.Trim() + "*'", inventoryBindingSource.Filter);
+                }
+                if (txtSearchUPC.Text.Trim() != "")
+                {
+                    inventoryBindingSource.Filter = addToFilter("UPC LIKE '" + txtSearchUPC.Text.Trim() + "*'", inventoryBindingSource.Filter);
+                }
+                dgvInventory.Refresh();
             }
-            if(chkStock.Checked == true)
+            catch (Exception)
             {
-                inventoryBindingSource.Filter = addToFilter("Instock = 0", inventoryBindingSource.Filter);
+                if (txtSearchName.Text.Contains("'")|| txtSearchUPC.Text.Contains("'"))
+                {
+                    MessageBox.Show("Non allowed character in inventory search boxes");
+                }
+                
             }
-            else
-            {
-                inventoryBindingSource.Filter = addToFilter("Instock >= 0", inventoryBindingSource.Filter);
-            }
-            if(txtSearchName.Text.Trim() != "")
-            {
-                inventoryBindingSource.Filter = addToFilter("ProductName LIKE '" + txtSearchName.Text.Trim() + "*'", inventoryBindingSource.Filter);
-            }
-            if (txtSearchUPC.Text.Trim() != "")
-            {
-                inventoryBindingSource.Filter = addToFilter("UPC LIKE '" + txtSearchUPC.Text.Trim() + "*'", inventoryBindingSource.Filter);
-            }
-            dgvInventory.Refresh();
+            
         }
 
         //function to handle all the filters on the inventory, allows for combo filters
         private void handleProductFiltering()
         {
             // removes existing filter, then rebuilds the filter 
+            //filters that use user text will currently break on ' input
             productBindingSource.RemoveFilter();
             dgvProducts.ClearSelection();
-            if (cbxProductDepartment.SelectedIndex > 0)
+            try
             {
-                productBindingSource.Filter = addToFilter("DepartmentName = '" + cbxProductDepartment.SelectedValue.ToString() + "'", productBindingSource.Filter);
+                
+                if (cbxProductDepartment.SelectedIndex > 0)
+                {
+                    productBindingSource.Filter = addToFilter("DepartmentName = '" + cbxProductDepartment.SelectedValue.ToString() + "'", productBindingSource.Filter);
+                }
+                if (cbxProductSupplier.SelectedIndex > 0)
+                {
+                    productBindingSource.Filter = addToFilter("SupplierName = '" + cbxProductSupplier.SelectedValue.ToString() + "'", productBindingSource.Filter);
+                }
+                if (txtSearchProductName.Text.Trim() != "")
+                {
+                    productBindingSource.Filter = addToFilter("ProductName LIKE '" + txtSearchProductName.Text.Trim() + "*'", productBindingSource.Filter);
+                }
+                if (txtSearchProductUPC.Text.Trim() != "")
+                {
+                    productBindingSource.Filter = addToFilter("UPC LIKE '" + txtSearchProductUPC.Text.Trim() + "*'", productBindingSource.Filter);
+                }
+                dgvProducts.Refresh();
             }
-            if (txtSearchProductName.Text.Trim() != "")
+            catch (Exception)
             {
-                productBindingSource.Filter = addToFilter("ProductName LIKE '" + txtSearchProductName.Text.Trim() + "*'", productBindingSource.Filter);
+                if (txtSearchProductName.Text.Contains("'") || txtSearchProductUPC.Text.Contains("'"))
+                {
+                    MessageBox.Show("Non allowed character in product search boxes");
+                }
             }
-            if (txtSearchProductUPC.Text.Trim() != "")
-            {
-                productBindingSource.Filter = addToFilter("UPC LIKE '" + txtSearchProductUPC.Text.Trim() + "*'", productBindingSource.Filter);
-            }
-            dgvProducts.Refresh();
         }
 
 
@@ -314,7 +379,7 @@ namespace Store_Management
                     lblInstock.Text = " ";
                 }
         }
-
+//
         //adds the selected inventory item to the order form
         private void btnOrder_Click(object sender, EventArgs e)
         {
@@ -327,17 +392,20 @@ namespace Store_Management
             txtName.ReadOnly = true;
             txtUPC.ReadOnly = true;
             cbxSelectDepartment.Enabled = false;
+            cbxSupplier.Enabled = false;
             nudSell.ReadOnly = true;
             nudBuy.ReadOnly = true;
             btnEdit.Text = "Edit Selected Product";
             btnSubmit.Enabled = false;
             btnDelete.Enabled = false;
+            btnEdit.Enabled = true;
             try
             {
 
                 txtName.Text = dgvProducts.SelectedRows[0].Cells[0].Value.ToString();
                 txtUPC.Text = dgvProducts.SelectedRows[0].Cells[1].Value.ToString();
                 cbxSelectDepartment.SelectedValue = dgvProducts.SelectedRows[0].Cells[2].Value.ToString();
+                cbxSupplier.SelectedValue = dgvProducts.SelectedRows[0].Cells[5].Value.ToString();
                 nudSell.Value = Convert.ToDecimal(dgvProducts.SelectedRows[0].Cells[3].Value);
                 nudBuy.Value = Convert.ToDecimal(dgvProducts.SelectedRows[0].Cells[4].Value);
                 btnSubmitNew.Enabled = false;
@@ -347,6 +415,7 @@ namespace Store_Management
                 txtName.Text = " ";
                 txtUPC.Text = " ";
                 cbxSelectDepartment.SelectedIndex = 0;
+                cbxSupplier.SelectedIndex = 0;
                 nudSell.Value = 0.00M;
                 nudBuy.Value = 0.00M;
             }
@@ -369,6 +438,12 @@ namespace Store_Management
             
         }
 
+        private void cbxProductSupplier_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            handleProductFiltering();
+        }
+
+
         //allows edit of product data
         private void btnEdit_Click(object sender, EventArgs e)
         {
@@ -377,6 +452,8 @@ namespace Store_Management
                 txtName.ReadOnly = false;
                 txtUPC.ReadOnly = false;
                 cbxSelectDepartment.Enabled = true;
+                cbxSupplier.Enabled = true;
+
                 nudSell.ReadOnly = false;
                 nudBuy.ReadOnly = false;
                 btnEdit.Text = "Stop Editing";
@@ -388,6 +465,7 @@ namespace Store_Management
                 txtName.ReadOnly = true;
                 txtUPC.ReadOnly = true;
                 cbxSelectDepartment.Enabled = false;
+                cbxSupplier.Enabled = false;
                 nudSell.ReadOnly = true;
                 nudBuy.ReadOnly = true;
                 btnEdit.Text = "Edit Selected Product";
@@ -405,9 +483,11 @@ namespace Store_Management
             txtName.ReadOnly = false;
             txtUPC.ReadOnly = false;
             cbxSelectDepartment.Enabled = true;
+            cbxSupplier.Enabled = true;
             nudSell.ReadOnly = false;
             nudBuy.ReadOnly = false;
             btnSubmitNew.Enabled = true;
+            btnEdit.Enabled = false;
         }
 
         //submits changes to an existing product
@@ -423,12 +503,13 @@ namespace Store_Management
                         connection.Open(); // connects to the database
                         OleDbCommand updateProduct = new OleDbCommand();  // sets up a new command
                         updateProduct.Connection = connection;  // sets the connection of the command
-                        updateProduct.CommandText = "UPDATE Products SET ProductName = ?, UPC = ?,Department = ?, SellPrice = ?, BuyCost = ? WHERE UPC = ?"; // the sql of the command, this one updates a products info
+                        updateProduct.CommandText = "UPDATE Products SET ProductName = ?, UPC = ?,Department = ?, SellPrice = ?, BuyCost = ?, SupplierID = ? WHERE UPC = ?"; // the sql of the command, this one updates a products info
                         updateProduct.Parameters.AddWithValue("ProductName", txtName.Text.Trim());
                         updateProduct.Parameters.AddWithValue("UPC", txtUPC.Text.Trim());
                         updateProduct.Parameters.AddWithValue("Department", cbxSelectDepartment.SelectedIndex + 1);
                         updateProduct.Parameters.AddWithValue("SellPrice", nudSell.Value);
                         updateProduct.Parameters.AddWithValue("BuyCost", nudBuy.Value);
+                        updateProduct.Parameters.AddWithValue("SupplierID", cbxSupplier.SelectedIndex + 1);
                         updateProduct.Parameters.AddWithValue("UPC", dgvProducts.SelectedRows[0].Cells[1].Value.ToString());
                         updateProduct.ExecuteNonQuery();
                         updateProduct.Dispose();
@@ -451,7 +532,7 @@ namespace Store_Management
             }
         }
 
-        //fills the dropdown box filter for departments from the database
+        //fills the dropdown box selector for departments from the database
         public void setupDepartmentSelect()
         {
             try
@@ -477,6 +558,32 @@ namespace Store_Management
                 MessageBox.Show("Department data could not be found");
             }
         }
+        //fills the dropdown box selector for suppliers from the database
+        public void setupSupplierSelect()
+        {
+            try
+            {
+                connection.Open(); // connects to the database
+                OleDbCommand getSuppliers = new OleDbCommand();
+                getSuppliers.Connection = connection;
+                getSuppliers.CommandText = "SELECT SupplierName,ID FROM Suppliers";
+                OleDbDataAdapter adap = new OleDbDataAdapter(getSuppliers);
+                DataSet ds = new DataSet();
+                adap.Fill(ds);
+                getSuppliers.Dispose();
+                connection.Close();
+                supplierSelectBindingSource.DataSource = ds.Tables[0].DefaultView;
+                //sets the binding sources and members of the supplier combobox
+                cbxSupplier.DataSource = supplierSelectBindingSource;
+                cbxSupplier.DisplayMember = "SupplierName";
+                cbxSupplier.ValueMember = "SupplierName";
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Supplier data could not be found");
+            }
+        }
+
 
         //prints the inventory datagridview
         private void btnPrint_Click(object sender, EventArgs e)
@@ -530,6 +637,7 @@ namespace Store_Management
             }
         }
 
+        //insets a new product into the database 
         private void btnSubmitNew_Click(object sender, EventArgs e)
         {
             //checks for fields to be valid before updating data
@@ -542,21 +650,23 @@ namespace Store_Management
                         connection.Open(); // connects to the database
                         OleDbCommand updateProduct = new OleDbCommand();  // sets up a new command
                         updateProduct.Connection = connection;  // sets the connection of the command
-                        updateProduct.CommandText = "INSERT INTO Products(ProductName, UPC,Department, SellPrice , BuyCost) Values (ProductName, UPC,Department, SellPrice , BuyCost)"; // the sql of the command, this one updates a products info
+                        updateProduct.CommandText = "INSERT INTO Products(ProductName,UPC,Instock,SellPrice,BuyCost,SupplierID,Department) Values (ProductName, UPC,Instock,SellPrice , BuyCost,SupplierID,Department)"; // the sql of the command, this one inserta a new product with 0 stock
                         updateProduct.Parameters.AddWithValue("ProductName", txtName.Text.Trim());
                         updateProduct.Parameters.AddWithValue("UPC", txtUPC.Text.Trim());
-                        updateProduct.Parameters.AddWithValue("Department", cbxSelectDepartment.SelectedIndex + 1);
+                        updateProduct.Parameters.AddWithValue("Instock", 0);
                         updateProduct.Parameters.AddWithValue("SellPrice", nudSell.Value);
                         updateProduct.Parameters.AddWithValue("BuyCost", nudBuy.Value);
-                        updateProduct.Parameters.AddWithValue("UPC", dgvProducts.SelectedRows[0].Cells[1].Value.ToString());
+                        updateProduct.Parameters.AddWithValue("SupplierID", cbxSupplier.SelectedIndex + 1);
+                        updateProduct.Parameters.AddWithValue("Department", cbxSelectDepartment.SelectedIndex + 1);
                         updateProduct.ExecuteNonQuery();
                         updateProduct.Dispose();
                         connection.Close();
                         fillAllTables("Inventory data could not be recieved", "Product data could not be recieved");
+                        MessageBox.Show("New Product was Successfully added to the database");
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show("Product Data Could not be updated ");
+                        MessageBox.Show("New product could not be added ");
                     }
                 }
                 else
@@ -568,6 +678,6 @@ namespace Store_Management
             {
                 MessageBox.Show("Product Name should not be blank");
             }
-        }
+        } 
     }
 }

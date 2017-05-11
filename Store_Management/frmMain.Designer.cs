@@ -66,6 +66,8 @@
             this.chkStock = new System.Windows.Forms.CheckBox();
             this.tabOrder = new System.Windows.Forms.TabPage();
             this.tabProducts = new System.Windows.Forms.TabPage();
+            this.cbxProductSupplier = new System.Windows.Forms.ComboBox();
+            this.label18 = new System.Windows.Forms.Label();
             this.cbxSelectDepartment = new System.Windows.Forms.ComboBox();
             this.nudSell = new System.Windows.Forms.NumericUpDown();
             this.nudBuy = new System.Windows.Forms.NumericUpDown();
@@ -90,6 +92,8 @@
             this.label17 = new System.Windows.Forms.Label();
             this.dgvProducts = new System.Windows.Forms.DataGridView();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.cbxSupplier = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabInventory.SuspendLayout();
@@ -428,6 +432,10 @@
             // 
             // tabProducts
             // 
+            this.tabProducts.Controls.Add(this.cbxSupplier);
+            this.tabProducts.Controls.Add(this.label19);
+            this.tabProducts.Controls.Add(this.cbxProductSupplier);
+            this.tabProducts.Controls.Add(this.label18);
             this.tabProducts.Controls.Add(this.cbxSelectDepartment);
             this.tabProducts.Controls.Add(this.nudSell);
             this.tabProducts.Controls.Add(this.nudBuy);
@@ -458,12 +466,31 @@
             this.tabProducts.Text = "Product Data";
             this.tabProducts.UseVisualStyleBackColor = true;
             // 
+            // cbxProductSupplier
+            // 
+            this.cbxProductSupplier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxProductSupplier.FormattingEnabled = true;
+            this.cbxProductSupplier.Location = new System.Drawing.Point(456, 32);
+            this.cbxProductSupplier.Name = "cbxProductSupplier";
+            this.cbxProductSupplier.Size = new System.Drawing.Size(121, 21);
+            this.cbxProductSupplier.TabIndex = 53;
+            this.cbxProductSupplier.SelectedIndexChanged += new System.EventHandler(this.cbxProductSupplier_SelectedIndexChanged);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(367, 35);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(76, 13);
+            this.label18.TabIndex = 52;
+            this.label18.Text = "Filter Supplier: ";
+            // 
             // cbxSelectDepartment
             // 
             this.cbxSelectDepartment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxSelectDepartment.Enabled = false;
             this.cbxSelectDepartment.FormattingEnabled = true;
-            this.cbxSelectDepartment.Location = new System.Drawing.Point(481, 105);
+            this.cbxSelectDepartment.Location = new System.Drawing.Point(482, 128);
             this.cbxSelectDepartment.Name = "cbxSelectDepartment";
             this.cbxSelectDepartment.Size = new System.Drawing.Size(105, 21);
             this.cbxSelectDepartment.TabIndex = 51;
@@ -471,7 +498,7 @@
             // nudSell
             // 
             this.nudSell.DecimalPlaces = 2;
-            this.nudSell.Location = new System.Drawing.Point(483, 128);
+            this.nudSell.Location = new System.Drawing.Point(484, 151);
             this.nudSell.Name = "nudSell";
             this.nudSell.ReadOnly = true;
             this.nudSell.Size = new System.Drawing.Size(103, 20);
@@ -480,7 +507,7 @@
             // nudBuy
             // 
             this.nudBuy.DecimalPlaces = 2;
-            this.nudBuy.Location = new System.Drawing.Point(481, 151);
+            this.nudBuy.Location = new System.Drawing.Point(482, 174);
             this.nudBuy.Name = "nudBuy";
             this.nudBuy.Size = new System.Drawing.Size(105, 20);
             this.nudBuy.TabIndex = 49;
@@ -488,7 +515,7 @@
             // btnSubmitNew
             // 
             this.btnSubmitNew.Enabled = false;
-            this.btnSubmitNew.Location = new System.Drawing.Point(411, 293);
+            this.btnSubmitNew.Location = new System.Drawing.Point(412, 340);
             this.btnSubmitNew.Name = "btnSubmitNew";
             this.btnSubmitNew.Size = new System.Drawing.Size(172, 23);
             this.btnSubmitNew.TabIndex = 48;
@@ -499,7 +526,7 @@
             // btnDelete
             // 
             this.btnDelete.Enabled = false;
-            this.btnDelete.Location = new System.Drawing.Point(411, 235);
+            this.btnDelete.Location = new System.Drawing.Point(412, 282);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(172, 23);
             this.btnDelete.TabIndex = 47;
@@ -509,7 +536,7 @@
             // 
             // btnCreate
             // 
-            this.btnCreate.Location = new System.Drawing.Point(411, 264);
+            this.btnCreate.Location = new System.Drawing.Point(412, 311);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(172, 23);
             this.btnCreate.TabIndex = 46;
@@ -520,7 +547,7 @@
             // btnSubmit
             // 
             this.btnSubmit.Enabled = false;
-            this.btnSubmit.Location = new System.Drawing.Point(411, 206);
+            this.btnSubmit.Location = new System.Drawing.Point(412, 253);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(172, 23);
             this.btnSubmit.TabIndex = 45;
@@ -530,7 +557,7 @@
             // 
             // txtUPC
             // 
-            this.txtUPC.Location = new System.Drawing.Point(452, 80);
+            this.txtUPC.Location = new System.Drawing.Point(453, 103);
             this.txtUPC.Name = "txtUPC";
             this.txtUPC.ReadOnly = true;
             this.txtUPC.Size = new System.Drawing.Size(133, 20);
@@ -538,7 +565,7 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(485, 58);
+            this.txtName.Location = new System.Drawing.Point(486, 81);
             this.txtName.Name = "txtName";
             this.txtName.ReadOnly = true;
             this.txtName.Size = new System.Drawing.Size(100, 20);
@@ -546,7 +573,7 @@
             // 
             // btnEdit
             // 
-            this.btnEdit.Location = new System.Drawing.Point(411, 177);
+            this.btnEdit.Location = new System.Drawing.Point(412, 224);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(172, 23);
             this.btnEdit.TabIndex = 39;
@@ -610,7 +637,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(411, 153);
+            this.label14.Location = new System.Drawing.Point(412, 176);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(64, 13);
             this.label14.TabIndex = 31;
@@ -619,7 +646,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(411, 130);
+            this.label9.Location = new System.Drawing.Point(412, 153);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(66, 13);
             this.label9.TabIndex = 29;
@@ -630,7 +657,7 @@
             this.label5.BackColor = System.Drawing.Color.Gray;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.label5.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label5.Location = new System.Drawing.Point(410, 32);
+            this.label5.Location = new System.Drawing.Point(411, 55);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(175, 23);
             this.label5.TabIndex = 28;
@@ -640,7 +667,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(411, 108);
+            this.label13.Location = new System.Drawing.Point(412, 131);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(68, 13);
             this.label13.TabIndex = 24;
@@ -649,7 +676,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(411, 83);
+            this.label15.Location = new System.Drawing.Point(412, 106);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(35, 13);
             this.label15.TabIndex = 22;
@@ -658,7 +685,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(408, 61);
+            this.label17.Location = new System.Drawing.Point(409, 84);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(81, 13);
             this.label17.TabIndex = 20;
@@ -680,12 +707,12 @@
             dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvProducts.DefaultCellStyle = dataGridViewCellStyle6;
-            this.dgvProducts.Location = new System.Drawing.Point(0, 32);
+            this.dgvProducts.Location = new System.Drawing.Point(0, 55);
             this.dgvProducts.Name = "dgvProducts";
             this.dgvProducts.ReadOnly = true;
             this.dgvProducts.RowHeadersVisible = false;
             this.dgvProducts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvProducts.Size = new System.Drawing.Size(405, 349);
+            this.dgvProducts.Size = new System.Drawing.Size(405, 326);
             this.dgvProducts.TabIndex = 1;
             this.dgvProducts.SelectionChanged += new System.EventHandler(this.dgvProducts_SelectionChanged);
             // 
@@ -698,6 +725,25 @@
             this.printPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
             this.printPreviewDialog1.Name = "printPreviewDialog1";
             this.printPreviewDialog1.Visible = false;
+            // 
+            // cbxSupplier
+            // 
+            this.cbxSupplier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxSupplier.Enabled = false;
+            this.cbxSupplier.FormattingEnabled = true;
+            this.cbxSupplier.Location = new System.Drawing.Point(456, 200);
+            this.cbxSupplier.Name = "cbxSupplier";
+            this.cbxSupplier.Size = new System.Drawing.Size(131, 21);
+            this.cbxSupplier.TabIndex = 55;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(409, 203);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(51, 13);
+            this.label19.TabIndex = 54;
+            this.label19.Text = "Supplier: ";
             // 
             // frmMain
             // 
@@ -788,6 +834,10 @@
         private System.Windows.Forms.Button btnPrint;
         private System.Windows.Forms.ComboBox cbxSelectDepartment;
         private System.Windows.Forms.PrintPreviewDialog printPreviewDialog1;
+        private System.Windows.Forms.ComboBox cbxProductSupplier;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.ComboBox cbxSupplier;
+        private System.Windows.Forms.Label label19;
     }
 }
 
