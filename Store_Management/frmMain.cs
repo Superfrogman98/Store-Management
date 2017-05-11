@@ -399,6 +399,7 @@ namespace Store_Management
             btnSubmit.Enabled = false;
             btnDelete.Enabled = false;
             btnEdit.Enabled = true;
+            btnCreate.Enabled = true;
             try
             {
 
@@ -488,6 +489,7 @@ namespace Store_Management
             nudBuy.ReadOnly = false;
             btnSubmitNew.Enabled = true;
             btnEdit.Enabled = false;
+            btnCreate.Enabled = false;
         }
 
         //submits changes to an existing product
